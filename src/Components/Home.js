@@ -25,6 +25,15 @@ const Home = ()=>{
       .catch(err => console.log(err));
   };
 
+  const uploadHandler = (event)=>{
+    const file  = event.target.files[0]
+    if(file.size>20971520){
+      alert("File Size above 20 MB")
+    }else{
+      setFile(file)
+    }
+  }
+
   const again = ()=>{
     window.location.reload()
   }
@@ -33,11 +42,8 @@ const Home = ()=>{
         <>
       <form onSubmit={upload}>
         <div> 
-            <label>Select your file:</label> 
-            <input onChange={event=>{
-                const file =  event.target.files[0];
-                setFile(file)
-            }} type="file" name="file"/>
+            <label>Select your file :   </label> 
+            <input onChange={uploadHandler} type="file" name="file"/>
         </div>
         <div>
           <button className="btn btn-primary mt-2" type="submit" name="file_upload" value="Upload">
