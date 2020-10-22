@@ -1,21 +1,37 @@
 import React,{useState} from "react"
 import axios from "axios"
+import { Progress } from 'reactstrap';
 
 const Home = ()=>{
 
   const [file,setFile] = useState()
   const [islink,setIslink] = useState(false)
   const [link,setLink] = useState("")
+
+  const [uploadProgress, updateUploadProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
   
+
+  const config = {
+    onUploadProgress: progressEvent => {
+      //console.log(progressEvent.loaded)
+      const progress = progressEvent.loaded / progressEvent.total * 100;
+      updateUploadProgress(Math.round(progress));
+    }
+  
+  }
+
 
   const upload = event => {
     event.preventDefault()
+    setUploading(true);
     const data = new FormData();
     data.append("file", file);
 
-    axios.post("http://localhost:5000/upload", data)
+    axios.post("https://onetimeupload.herokuapp.com/upload", data,config)
       .then(res => {
           console.log(res.data)
+          setUploading(false);
           alert(res.data.message)
           setIslink(true)
           setLink(res.data.shorturl)
@@ -52,6 +68,14 @@ const Home = ()=>{
           </button>
         </div>
       </form>
+      {(uploading)
+          ?
+          <div>
+            <div className="text-center">{uploadProgress}%</div>
+            <Progress value={uploadProgress} />
+          </div>
+          : null
+        }
       {islink ? <div>
                 <p>Your One time Link :</p>
                     <h4>{link}</h4>
