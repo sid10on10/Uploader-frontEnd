@@ -13,7 +13,7 @@ const Home = ()=>{
     const data = new FormData();
     data.append("file", file);
 
-    axios.post("http://localhost:5000/upload", data)
+    axios.post("https://onetimeupload.herokuapp.com/upload", data)
       .then(res => {
           console.log(res.data)
           alert(res.data.message)
