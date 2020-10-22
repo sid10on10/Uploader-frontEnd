@@ -29,6 +29,7 @@ const Home = ()=>{
     const file  = event.target.files[0]
     if(file.size>20971520){
       alert("File Size above 20 MB")
+      event.target.value = null
     }else{
       setFile(file)
     }
