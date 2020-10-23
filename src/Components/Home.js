@@ -1,12 +1,12 @@
 import React,{useState} from "react"
 import axios from "axios"
 import { Progress } from 'reactstrap';
+import Link from "./Link"
 
 const Home = ()=>{
 
-  const [file,setFile] = useState()
-  const [islink,setIslink] = useState(false)
-  const [link,setLink] = useState("")
+  const [files,setFiles] = useState()
+  const [links,setLinks] = useState()
 
   const [message,setMessage] = useState()
 
@@ -28,30 +28,37 @@ const Home = ()=>{
     event.preventDefault()
     setUploading(true);
     const data = new FormData();
-    data.append("file", file);
+    data.append("files", files);
+    for (let i = 0; i < files.length; i++) {
+      data.append(`files`, files[i])
+    }
 
-    axios.post("https://onetimeupload.herokuapp.com/upload", data,config)
+    axios.post("https://onetimeupload.herokuapp.com/", data,config)
       .then(res => {
           //console.log(res.data)
           setUploading(false);
           //alert(res.data.message)
           setMessage(res.data.message)
-          setIslink(true)
-          setLink(res.data.shorturl)
-          setFile()
+          setLinks(res.data.url_list)
+          setFiles()
         }
       )
       .catch(err => console.log(err));
   };
 
   const uploadHandler = (event)=>{
-    const file  = event.target.files[0]
-    if(file.size>20971520){
-      alert("File Size above 20 MB")
+    const upload_files  = event.target.files
+    let files_size = 0
+    for (let i = 0; i < upload_files.length; i++) {
+        files_size+=upload_files[i].size
+    }
+    if(files_size>20971520){
+      alert("Files Size should be below 20 MB")
       event.target.value = null
     }else{
-      setFile(file)
+      setFiles(upload_files)
     }
+    //console.log(upload_files)
   }
 
   const again = ()=>{
@@ -63,7 +70,7 @@ const Home = ()=>{
       <form onSubmit={upload}>
         <div> 
             <label>Select your file :   </label> 
-            <input onChange={uploadHandler} type="file" name="file"/>
+            <input onChange={uploadHandler} type="file" name="file" multiple/>
         </div>
         <div>
           <button className="btn btn-primary mt-2" type="submit" name="file_upload" value="Upload">
@@ -83,11 +90,22 @@ const Home = ()=>{
                     <p>{message}</p>
                 </div> 
           : <div></div>}
-      {islink ? <div>
-                <p>Your One time Link :</p>
-                    <h4>{link}</h4>
-                <button onClick={again} className="btn btn-success">Upload Another</button>
-                </div> 
+      {links ? 
+        <>
+        {links.map((link, index) => {
+
+                  return (
+                      <div>
+                          <Link
+                              key={index}
+                              name={link.file_name}
+                              short_link={link.shortURL}
+                          />
+                      </div>
+                  );
+          })}
+        <button onClick={again} className="btn btn-success">Upload Another</button>
+        </>
           : <div></div>}
       </>
     )
