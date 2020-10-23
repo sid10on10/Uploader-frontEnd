@@ -8,6 +8,8 @@ const Home = ()=>{
   const [islink,setIslink] = useState(false)
   const [link,setLink] = useState("")
 
+  const [message,setMessage] = useState()
+
   const [uploadProgress, updateUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   
@@ -30,9 +32,10 @@ const Home = ()=>{
 
     axios.post("https://onetimeupload.herokuapp.com/upload", data,config)
       .then(res => {
-          console.log(res.data)
+          //console.log(res.data)
           setUploading(false);
-          alert(res.data.message)
+          //alert(res.data.message)
+          setMessage(res.data.message)
           setIslink(true)
           setLink(res.data.shorturl)
           setFile()
@@ -76,6 +79,10 @@ const Home = ()=>{
           </div>
           : null
         }
+        {message ? <div>
+                    <p>{message}</p>
+                </div> 
+          : <div></div>}
       {islink ? <div>
                 <p>Your One time Link :</p>
                     <h4>{link}</h4>
