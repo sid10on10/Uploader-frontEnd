@@ -67,10 +67,11 @@ const Home = ()=>{
 
     return (
         <>
+        <h3>Select multiple files upto 20 MB</h3>
       <form onSubmit={upload}>
         <div> 
-            <label>Select your file :   </label> 
-            <input onChange={uploadHandler} type="file" name="file" multiple/>
+            <label >Select your files :   </label> 
+            <input style={{marginLeft:"10px"}}onChange={uploadHandler} type="file" name="file" multiple/>
         </div>
         <div>
           <button className="btn btn-primary mt-2" type="submit" name="file_upload" value="Upload">
