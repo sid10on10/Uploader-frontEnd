@@ -33,7 +33,7 @@ const Home = ()=>{
       data.append(`files`, files[i])
     }
 
-    axios.post("https://onetimeupload.herokuapp.com/", data,config)
+    axios.post("https://onetimeupload.herokuapp.com/upload", data,config)
       .then(res => {
           //console.log(res.data)
           setUploading(false);
