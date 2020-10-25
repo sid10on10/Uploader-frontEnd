@@ -20,8 +20,8 @@ function App() {
         </div>
       </nav>
 
-      <div className="auth-wrapper">
-        <div className="auth-inner">
+      <div className="auth-wrapper container">
+        <div className="auth-inner container-fluid">
           <Switch>
             <Route exact path="/" component={Home}/>
           </Switch>
